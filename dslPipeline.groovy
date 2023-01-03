@@ -92,7 +92,7 @@ def lastCompletedBuild = build.getLastCompletedBuild()
 
 def runDependendJobs(){
   
-  def upstreamProject1 = Hudson.instance.getItem("flaskBuild")
+  def AbstractProject upstreamProject1 = Hudson.instance.getItem("flaskBuild")
   def upstreamProject2 = Hudson.instance.getItem("nginxBuild")
   def downstreamProject = Hudson.instance.getItem("dslRunAndVerify")
 
@@ -100,14 +100,13 @@ def runDependendJobs(){
 
  if (upstreamProject1 != null && upstreamProject2 != null && downstreamProject != null) {
     // trigger builds for the upstream projects
-    def upstreamJobRunOne = upstreamProject1.scheduleBuild(0)
+    upstreamProject1.scheduleBuild(0)
     def upstreamJobRunSecond =  upstreamProject2.scheduleBuild(0)
     // wait for the upstream builds to complete
 
-    AbstractProject project = Hudson.instance.getItem("flaskBuild");
 
     // Get a reference to the most recent build for the project
-    AbstractBuild build = project.getLastBuild();
+    AbstractBuild build = upstreamProject1.getLastBuild();
 
     // Wait for the build to complete
     build.waitForCompletion();
