@@ -52,6 +52,7 @@ def lastCompletedBuild = build.getLastCompletedBuild()
 
 println "isInProgress: ${isInProgress}"
 if ( !isInProgress){
+  sleep(100)
   println "why dont u wait ? "
 }
 
