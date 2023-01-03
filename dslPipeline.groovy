@@ -3,6 +3,8 @@
 import hudson.model.*
 import jenkins.model.*
 
+import hudson.model.AbstractBuild;
+import hudson.model.AbstractProject;
 
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition
 import org.jenkinsci.plugins.workflow.job.WorkflowJob
@@ -47,7 +49,7 @@ def getLastCompletedBuild(project) {
 
 // Get a reference to the build
 def checkProj = Hudson.instance.getItem(project);
-def build = checkProj.getLastBuild();
+build = checkProj.getLastBuild();
 def isInProgress = build.isBuilding()
 build.waitForCompletion();
 def lastCompletedBuild = build.getLastCompletedBuild()
@@ -102,8 +104,13 @@ def runDependendJobs(){
     def upstreamJobRunSecond =  upstreamProject2.scheduleBuild(0)
     // wait for the upstream builds to complete
 
-    upstreamJobRunOne.waitForCompletion();
-    upstreamJobRunSecond.waitForCompletion();
+    AbstractProject project = Hudson.instance.getItem("flaskBuild");
+
+    // Get a reference to the most recent build for the project
+    AbstractBuild build = project.getLastBuild();
+
+    // Wait for the build to complete
+    build.waitForCompletion();
 
     // def build1 = getLastCompletedBuild("flaskBuild")
     // def build2 = getLastCompletedBuild("nginxBuild")
