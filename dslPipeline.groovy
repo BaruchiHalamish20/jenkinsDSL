@@ -66,7 +66,9 @@ def runDependendJobs(){
     // trigger builds for the upstream projects
     def upstreamJobRunOne = upstreamProject1.scheduleBuild(new Cause.UserIdCause())
     def upstreamJobRunSecond =  upstreamProject2.scheduleBuild(new Cause.UserIdCause())
-  
+
+    println "upstreamJobRunOne : ${upstreamJobRunOne} "  
+    println "upstreamJobRunSecond : ${upstreamJobRunSecond} "  
     // wait for the upstream builds to complete
 
     def build1 = getLastCompletedBuild(upstreamProject1)
