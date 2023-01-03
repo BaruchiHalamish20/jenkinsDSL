@@ -45,7 +45,19 @@ def createJob(name, script) {
 @NonCPS
 def getLastCompletedBuild(project) {
     println "getLastCompletedBuild ... "
-    def lastbuildstarted = project.onStartBuilding()
+
+    // Get a reference to the build
+AbstractBuild build = Hudson.instance.getItem(project);
+
+// Check if the build is currently in progress
+if (build.isBuilding()) {
+  // Build is in progress
+  System.out.println("${project} is in progress...");
+} else {
+  // Build is not in progress
+  System.out.println("${project} is not in progress.");
+}
+
 
 
     println "lastbuildstarted : ${lastbuildstarted} "  
@@ -66,6 +78,7 @@ def runDependendJobs(){
   def downstreamProject = Hudson.instance.getItem("dslRunAndVerify")
 
 
+
  if (upstreamProject1 != null && upstreamProject2 != null && downstreamProject != null) {
     // trigger builds for the upstream projects
     def upstreamJobRunOne = upstreamProject1.scheduleBuild(new Cause.UserIdCause())
@@ -75,8 +88,8 @@ def runDependendJobs(){
     println "upstreamJobRunSecond : ${upstreamJobRunSecond} "  
     // wait for the upstream builds to complete
 
-    def build1 = getLastCompletedBuild(upstreamProject1)
-    def build2 = getLastCompletedBuild(upstreamProject2)
+    def build1 = getLastCompletedBuild("flaskBuild")
+    def build2 = getLastCompletedBuild("nginxBuild")
 
     println "Builds done ... "
     // check the build results for the upstream projects
