@@ -61,10 +61,11 @@ def runDependendJobs(){
   def upstreamProject2 = Hudson.instance.getItem("nginxBuild")
   def downstreamProject = Hudson.instance.getItem("dslRunAndVerify")
 
+
  if (upstreamProject1 != null && upstreamProject2 != null && downstreamProject != null) {
     // trigger builds for the upstream projects
-    upstreamProject1.scheduleBuild(new Cause.UserIdCause())
-    upstreamProject2.scheduleBuild(new Cause.UserIdCause())
+    def upstreamJobRunOne = upstreamProject1.scheduleBuild(new Cause.UserIdCause())
+    def upstreamJobRunSecond =  upstreamProject2.scheduleBuild(new Cause.UserIdCause())
   
     // wait for the upstream builds to complete
 
@@ -155,7 +156,8 @@ pipeline {
       steps {
         sh "pwd"
         sh "sed -i s/JENKINS_SERVER_IP_ORIG/`cat /tmp/JENKINS_SERVER_IP`/ docker-compose.yaml" 
-        sh " docker-compose rm -f"  
+        sh "docker-compose stop"
+        sh "docker-compose rm -f"  
         sh "docker-compose up -d"
         sh "date" 
         sh "echo 'docker-compose'"
