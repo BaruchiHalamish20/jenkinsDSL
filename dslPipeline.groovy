@@ -46,8 +46,8 @@ def createJob(name, script) {
 def getLastCompletedBuild(project) {
 
 // Get a reference to the build
-def build = Hudson.instance.getItem(project);
-def build.getLastBuild();
+def checkProj = Hudson.instance.getItem(project);
+def build = checkProj.getLastBuild();
 def isInProgress = build.isBuilding()
 build.waitForCompletion();
 def lastCompletedBuild = build.getLastCompletedBuild()
