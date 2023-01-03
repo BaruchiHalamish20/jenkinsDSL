@@ -45,6 +45,10 @@ def createJob(name, script) {
 @NonCPS
 def getLastCompletedBuild(project) {
     println "getLastCompletedBuild ... "
+    def lastbuildstarted = project.onStartBuilding()
+
+
+    println "lastbuildstarted : ${lastbuildstarted} "  
     def lastCompletedBuild = project.getLastCompletedBuild()
     
     while ( lastCompletedBuild == null ) {
