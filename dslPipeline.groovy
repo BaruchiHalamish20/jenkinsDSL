@@ -49,10 +49,15 @@ def getLastCompletedBuild(project) {
 def build = Hudson.instance.getItem(project);
 def isInProgress = build.isBuilding()
 
+def checkProject = Hudson.instance.getItem("flaskBuild")
+
+lastCompletedBuild = checkProject.getLastCompletedBuild()
+
 println "isInProgress: ${isInProgress}"
 
 // waiting for first build
     while ( isInProgress ) {
+        checkProject = Hudson.instance.getItem("flaskBuild")
         checkProject.getLastCompletedBuild()
         sleep(100)
         println "waiting for build to start ... "
@@ -60,9 +65,6 @@ println "isInProgress: ${isInProgress}"
         isInProgress = build.isBuilding()
     }
 
-def checkProject = Hudson.instance.getItem("flaskBuild")
-
-lastCompletedBuild = checkProject.getLastCompletedBuild()
 
 
 // // Check if the build is currently in progress
