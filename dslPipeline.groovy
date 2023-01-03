@@ -51,11 +51,11 @@ def getLastCompletedBuild(projectName) {
 
   // Wait for the build to complete
   isBuild = job.isBuilding()
-  println "${job} ... ${isBuild}"
+  println "${job} ... ${isBuild} "
 
   while ( isBuild ) {
       println "waiting ... "
-      isBuild = jobA.isBuilding()    
+      isBuild = job.isBuilding()    
   }
 
     project = Hudson.instance.getItem(projectName)
