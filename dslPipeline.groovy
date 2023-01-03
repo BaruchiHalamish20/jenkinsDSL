@@ -51,12 +51,12 @@ def isInProgress = build.isBuilding()
 println "isInProgress: ${isInProgress}"
 
 // waiting for first build
-    while ( !isInProgress ) {
-        sleep(100)
-        println "waiting for build to start ... "
-        build = Hudson.instance.getItem(project)
-        isInProgress = build.isBuilding()
-    }
+    // while ( !isInProgress ) {
+    //     sleep(100)
+    //     println "waiting for build to start ... "
+    //     build = Hudson.instance.getItem(project)
+    //     isInProgress = build.isBuilding()
+    // }
 
 
 
@@ -72,17 +72,15 @@ println "isInProgress: ${isInProgress}"
 //   println "2"
 // }
     
- lastCompletedBuild = project.getLastCompletedBuild()
-
-    // println "lastbuildstarted : ${build} "  
-    // def lastCompletedBuild = build.getLastCompletedBuild()
+ 
+    def lastCompletedBuild = build.getLastCompletedBuild()
     
-    // while ( lastCompletedBuild == null && build.isBuilding() ) {
-    //     sleep(100)
-    //     println "waiting ... "
-    //     build = Hudson.instance.getItem(project)
-    //     lastCompletedBuild = project.getLastCompletedBuild()
-    // }
+    while ( lastCompletedBuild == null && build.isBuilding() ) {
+         sleep(100)
+         println "waiting ... "
+         build = Hudson.instance.getItem(project)
+         lastCompletedBuild = project.getLastCompletedBuild()
+    }
     return lastCompletedBuild
 }
 
