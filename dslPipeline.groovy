@@ -101,8 +101,8 @@ def runDependendJobs(){
 
  if (upstreamProject1 != null && upstreamProject2 != null && downstreamProject != null) {
     // trigger builds for the upstream projects
-    def upstreamJobRunOne = upstreamProject1.scheduleBuild(new Cause.UserIdCause())
-    def upstreamJobRunSecond =  upstreamProject2.scheduleBuild(new Cause.UserIdCause())
+    def upstreamJobRunOne = upstreamProject1.scheduleBuild(0)
+    def upstreamJobRunSecond =  upstreamProject2.scheduleBuild(0)
 
     println "upstreamJobRunOne : ${upstreamJobRunOne} "  
     println "upstreamJobRunSecond : ${upstreamJobRunSecond} "  
