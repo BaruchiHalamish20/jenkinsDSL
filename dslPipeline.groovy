@@ -47,7 +47,9 @@ def getLastCompletedBuild(project) {
     println "getLastCompletedBuild ... "
 
     // Get a reference to the build
- build = Hudson.instance.getItem(project);
+def build = Hudson.instance.getItem(project);
+def isInProgress = build.isBuilding()
+println "{isInProgress}"
 
 // Check if the build is currently in progress
 if (build.isBuilding()) {
@@ -56,6 +58,7 @@ if (build.isBuilding()) {
 println "1"
 } else {
   // Build is not in progress
+  
   System.out.println("${project} is not in progress.");
   println "2"
 }
