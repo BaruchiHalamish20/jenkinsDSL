@@ -51,10 +51,10 @@ def getLastCompletedBuild(project) {
     
   def jobA = Jenkins.instance.getItemByFullName('flaskBuild')
  
-println "jobA ... ${jobA} "
+
   // Wait for the build to complete
-  jobA.wait()
- 
+  isBuild = jobA.job.isBuilding()
+println "jobA ... ${isBuild} " 
     while ( lastCompletedBuild == null ) {
         sleep(100)
         println "waiting ... "
