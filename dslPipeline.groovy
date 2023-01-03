@@ -53,9 +53,11 @@ def getLastCompletedBuild(project) {
 if (build.isBuilding()) {
   // Build is in progress
   System.out.println("${project} is in progress...");
+println "1"
 } else {
   // Build is not in progress
   System.out.println("${project} is not in progress.");
+  println "2"
 }
 
 
