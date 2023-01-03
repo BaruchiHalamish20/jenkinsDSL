@@ -46,12 +46,11 @@ def createJob(name, script) {
 
 @NonCPS
 def getLastCompletedBuild(projectName) {
-  def checkProjectBuild = Jenkins.instance.getItemByFullName(projectName)
+  def jobA = Jenkins.instance.getItemByFullName(projectName)
  
-
   // Wait for the build to complete
-  isBuild = checkProjectBuild.isBuilding()
-  println "${checkProjectBuild} ... ${isBuild} " 
+  isBuild = jobA.isBuilding()
+println "jobA ... ${isBuild} " 
     while ( isBuild ) {
         println "waiting ... "
         isBuild = jobA.isBuilding()
@@ -75,8 +74,8 @@ def runDependendJobs(){
   
     // wait for the upstream builds to complete
 
-    def build1 = getLastCompletedBuild(upstreamProject1)
-    def build2 = getLastCompletedBuild(upstreamProject2)
+    def build1 = getLastCompletedBuild("flaskBuild")
+    def build2 = getLastCompletedBuild("nginxBuild")
 
     println "Builds done ... "
     // check the build results for the upstream projects
