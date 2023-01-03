@@ -2,7 +2,7 @@
 
 import hudson.model.*
 import jenkins.model.*
-
+import hudson.model.QueueTaskFuture
 
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition
 import org.jenkinsci.plugins.workflow.job.WorkflowJob
