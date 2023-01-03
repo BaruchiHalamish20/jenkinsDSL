@@ -51,8 +51,7 @@ def isInProgress = build.isBuilding()
 def lastCompletedBuild = build.getLastCompletedBuild()
 
 println "isInProgress: ${isInProgress}"
-if (  !isInProgress ){
-  @NonCPS
+if ( !isInProgress ){
   sleep(100)
   println "why dont u wait ? "
 }
