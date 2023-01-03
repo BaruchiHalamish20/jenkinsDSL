@@ -3,8 +3,6 @@
 import hudson.model.*
 import jenkins.model.*
 
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
 
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition
 import org.jenkinsci.plugins.workflow.job.WorkflowJob
@@ -48,12 +46,14 @@ def createJob(name, script) {
 def getLastCompletedBuild(project) {
 
 // Get a reference to the build
-def checkProj = Hudson.instance.getItem(project);
-build = checkProj.getLastBuild();
+def build = Hudson.instance.getItem(project);
 def isInProgress = build.isBuilding()
-build.waitForCompletion();
 def lastCompletedBuild = build.getLastCompletedBuild()
 
+println "isInProgress: ${isInProgress}"
+if ( !isInProgress){
+  println "why dont u wait ? "
+}
 
 // waiting for first build
     while ( lastCompletedBuild == null && !isInProgress ) {
@@ -92,36 +92,32 @@ def lastCompletedBuild = build.getLastCompletedBuild()
 
 def runDependendJobs(){
   
-  def WorkflowJob upstreamWorkflow1 = Hudson.instance.getItem("flaskBuild")
-  def AbstractProject upstreamProject1 = Hudson.instance.getItem(upstreamWorkflow1.getFullName());
+  def upstreamProject1 = Hudson.instance.getItem("flaskBuild")
   def upstreamProject2 = Hudson.instance.getItem("nginxBuild")
   def downstreamProject = Hudson.instance.getItem("dslRunAndVerify")
 
-  // trigger builds for the upstream projects
-  upstreamProject1.scheduleBuild(0)
-  def upstreamJobRunSecond =  upstreamProject2.scheduleBuild(0)
-  // wait for the upstream builds to complete
+ if (upstreamProject1 != null && upstreamProject2 != null && downstreamProject != null) {
+    // trigger builds for the upstream projects
+    def upstreamJobRunOne = upstreamProject1.scheduleBuild(0)
+    def upstreamJobRunSecond =  upstreamProject2.scheduleBuild(0)
 
+    println "upstreamJobRunOne : ${upstreamJobRunOne} "  
+    println "upstreamJobRunSecond : ${upstreamJobRunSecond} "  
+    // wait for the upstream builds to complete
 
-  // Get a reference to the most recent build for the project
-  AbstractBuild build = upstreamProject1.getLastBuild();
+    def build1 = getLastCompletedBuild("flaskBuild")
+    def build2 = getLastCompletedBuild("nginxBuild")
 
-  // Wait for the build to complete
-  build.waitForCompletion();
+    println "Builds done ... "
+    // check the build results for the upstream projects
+    def build1Result = build1.getResult()
+    def build2Result = build2.getResult()
 
-  // def build1 = getLastCompletedBuild("flaskBuild")
-  // def build2 = getLastCompletedBuild("nginxBuild")
-
-  println "Builds done ... "
-  // check the build results for the upstream projects
-  def build1Result = build1.getResult()
-  def build2Result = build2.getResult()
-
-  if (build1Result == Result.SUCCESS && build2Result == Result.SUCCESS) {
-      // trigger the downstream build
-      downstreamProject.scheduleBuild(new Cause.UpstreamCause(build1))
+    if (build1Result == Result.SUCCESS && build2Result == Result.SUCCESS) {
+        // trigger the downstream build
+        downstreamProject.scheduleBuild(new Cause.UpstreamCause(build1))
+    }
   }
-  
 }
 
 
