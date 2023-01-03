@@ -58,7 +58,7 @@ println "jobA ... ${isBuild} "
     }
 
     def project = Hudson.instance.getItem(projectName
-    lastCompletedBuild = project.getLastCompletedBuild()
+    def lastCompletedBuild = project.getLastCompletedBuild()
     
     return lastCompletedBuild
 }
