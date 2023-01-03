@@ -45,22 +45,19 @@ def createJob(name, script) {
 
 
 @NonCPS
-def getLastCompletedBuild(project) {
-    println "getLastCompletedBuild ... ${project}"
-    def lastCompletedBuild = project.getLastCompletedBuild()
-    
-  def jobA = Jenkins.instance.getItemByFullName('flaskBuild')
+def waitOnBuild(projectName) {
+  def checkProjectBuild = Jenkins.instance.getItemByFullName(projectName)
  
-
   // Wait for the build to complete
-  isBuild = jobA.isBuilding()
-println "jobA ... ${isBuild} " 
-    while ( isBuild ) {
-        println "waiting ... "
-        isBuild = jobA.isBuilding()
-        lastCompletedBuild = project.getLastCompletedBuild()
-    }
-    return lastCompletedBuild
+  isBuild = checkProjectBuild.isBuilding()
+  println "${checkProjectBuild} ... ${isBuild} " 
+
+  while ( isBuild ) {
+      println "waiting ... "
+      isBuild = checkProjectBuild.isBuilding()
+  }
+      
+  return true
 }
 
 def runDependendJobs(){
@@ -75,14 +72,12 @@ def runDependendJobs(){
     upstreamProject2.scheduleBuild(0)
   
     // wait for the upstream builds to complete
-
-    def build1 = getLastCompletedBuild(upstreamProject1)
-    def build2 = getLastCompletedBuild(upstreamProject2)
-
+   waitOnBuild("flaskBuild")
+  
     println "Builds done ... "
     // check the build results for the upstream projects
-    def build1Result = build1.getResult()
-    def build2Result = build2.getResult()
+    def build1Result = upstreamProject1.getLastCompletedBuild().getResult()
+    def build2Result = upstreamProject2.getLastCompletedBuild()..getResult()
 
     if (build1Result == Result.SUCCESS && build2Result == Result.SUCCESS) {
         // trigger the downstream build
