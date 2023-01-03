@@ -49,15 +49,14 @@ def getLastCompletedBuild(projectName) {
   def project = Hudson.instance.getItem(projectName)
   def jobA = Jenkins.instance.getItemByFullName(projectName)
 
-
   // Wait for the build to complete
   isBuild = jobA.isBuilding()
-println "jobA ... ${isBuild} " 
-    while ( isBuild ) {
-        println "waiting ... "
-        isBuild = jobA.isBuilding()
-        
-    }
+
+  while ( isBuild ) {
+      println "waiting ... "
+      isBuild = jobA.isBuilding()
+      
+  }
 
     project = Hudson.instance.getItem(projectName)
     lastCompletedBuild = project.getLastCompletedBuild()
