@@ -77,7 +77,7 @@ def runDependendJobs(){
     // wait for the upstream builds to complete
 
     def build1 = getLastCompletedBuild("flaskBuild")
-    def build2 = getLastCompletedBuild("nginxBuild")
+    def build2 = getLastCompletedBuild("flaskBuild")
 
     println "Builds done ... "
     // check the build results for the upstream projects
