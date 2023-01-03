@@ -47,14 +47,11 @@ def getLastCompletedBuild(project) {
 
 // Get a reference to the build
 def build = Hudson.instance.getItem(project);
+def build.getLastBuild();
 def isInProgress = build.isBuilding()
+build.waitForCompletion();
 def lastCompletedBuild = build.getLastCompletedBuild()
 
-println "isInProgress: ${isInProgress}"
-if ( !isInProgress ){
-  sleep(100)
-  println "why dont u wait ? "
-}
 
 // waiting for first build
     while ( lastCompletedBuild == null && !isInProgress ) {
@@ -103,13 +100,13 @@ def runDependendJobs(){
     // trigger builds for the upstream projects
     def upstreamJobRunOne = upstreamProject1.scheduleBuild(0)
     def upstreamJobRunSecond =  upstreamProject2.scheduleBuild(0)
-
-    println "upstreamJobRunOne : ${upstreamJobRunOne} "  
-    println "upstreamJobRunSecond : ${upstreamJobRunSecond} "  
     // wait for the upstream builds to complete
 
-    def build1 = getLastCompletedBuild("flaskBuild")
-    def build2 = getLastCompletedBuild("nginxBuild")
+    upstreamJobRunOne.waitForCompletion();
+    upstreamJobRunSecond.waitForCompletion();
+
+    // def build1 = getLastCompletedBuild("flaskBuild")
+    // def build2 = getLastCompletedBuild("nginxBuild")
 
     println "Builds done ... "
     // check the build results for the upstream projects
