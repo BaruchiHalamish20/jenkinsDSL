@@ -53,6 +53,7 @@ println "isInProgress: ${isInProgress}"
 
 // waiting for first build
     while ( isInProgress ) {
+        checkProject.getLastCompletedBuild()
         sleep(100)
         println "waiting for build to start ... "
         // build = Hudson.instance.getItem(project)
