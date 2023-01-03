@@ -79,7 +79,10 @@ def runDependendJobs(){
 
     if (build1Result == Result.SUCCESS && build2Result == Result.SUCCESS) {
         // trigger the downstream build
-        downstreamProject.scheduleBuild(new Cause.UpstreamCause(build1))
+        def buildA = upstreamProject1.getLastBuild()
+        def buildB = new Build(downstreamProject)
+        buildB.addDownstreamBuild(buildA)
+        // downstreamProject.scheduleBuild(new Cause.UpstreamCause(build1))
     }
   }
 }
