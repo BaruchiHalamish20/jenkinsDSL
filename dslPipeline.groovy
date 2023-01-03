@@ -52,7 +52,7 @@ def isInProgress = build.isBuilding()
 println "isInProgress: ${isInProgress}"
 
 // waiting for first build
-    while ( !isInProgress ) {
+    while ( isInProgress ) {
         sleep(100)
         println "waiting for build to start ... "
         // build = Hudson.instance.getItem(project)
