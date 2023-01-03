@@ -46,7 +46,7 @@ def createJob(name, script) {
 
 @NonCPS
 def getLastCompletedBuild(project) {
-    println "getLastCompletedBuild ... "
+    println "getLastCompletedBuild ... ${project}"
     def lastCompletedBuild = project.getLastCompletedBuild()
     
   def jobA = Jenkins.instance.getItemByFullName('flaskBuild')
