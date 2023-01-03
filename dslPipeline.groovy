@@ -59,7 +59,9 @@ println "isInProgress: ${isInProgress}"
         isInProgress = build.isBuilding()
     }
 
-lastCompletedBuild = project.getLastCompletedBuild()
+def checkProject = Hudson.instance.getItem("flaskBuild")
+
+lastCompletedBuild = checkProject.getLastCompletedBuild()
 
 
 // // Check if the build is currently in progress
