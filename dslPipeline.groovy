@@ -3,8 +3,10 @@
 import hudson.model.*
 import jenkins.model.*
 
-import org.jenkinsci.plugins.workflow.job.*
+
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition
+import org.jenkinsci.plugins.workflow.job.WorkflowJob
+import org.jenkinsci.plugins.workflow.job.*
 
 import hudson.model.FreeStyleProject
 import hudson.tasks.ArtifactArchiver
@@ -65,12 +67,10 @@ def runDependendJobs(){
   def jobA = Jenkins.instance.getItemByFullName('flaskBuild')
   def jobC = Jenkins.instance.getItemByFullName('nginxBuild')
   def jobB = Jenkins.instance.getItemByFullName('dslRunAndVerify')
-def paramsA = [cause: 'Started by script']
-def paramsC = [cause: 'Started by script']
 
   // Start a build of the first pipeline job
-  def buildA = jobA.build(paramsA)
- def buildC = jobC.build(paramsC)
+  def buildA = jobA.build(cause: 'Started by script')
+ def buildC = jobC.build(cause: 'Started by script')
 
 
   // Wait for the build to complete
