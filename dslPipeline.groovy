@@ -56,10 +56,11 @@ def getLastCompletedBuild(project) {
   isBuild = jobA.isBuilding()
 println "jobA ... ${isBuild} " 
     while ( isBuild ) {
-        sleep(100)
         println "waiting ... "
-         isBuild = jobA.isBuilding()
+        isBuild = jobA.isBuilding()
         lastCompletedBuild = project.getLastCompletedBuild()
+        sleep(100)
+        
     }
     return lastCompletedBuild
 }
