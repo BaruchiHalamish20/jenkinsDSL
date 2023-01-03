@@ -63,6 +63,14 @@ println "1"
   println "2"
 }
 
+// waiting for first build
+    while ( !build.isBuilding() ) {
+        sleep(100)
+        println "waiting for build to start ... "
+        build = Hudson.instance.getItem(project)
+        isInProgress = build.isBuilding()
+    }
+    
 
 
     println "lastbuildstarted : ${build} "  
