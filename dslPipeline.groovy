@@ -51,6 +51,9 @@ def isInProgress = build.isBuilding()
 def lastCompletedBuild = build.getLastCompletedBuild()
 
 println "isInProgress: ${isInProgress}"
+if ( !isInProgress){
+  println "why dont u wait ? "
+}
 
 // waiting for first build
     while ( lastCompletedBuild == null && !isInProgress ) {
