@@ -61,7 +61,7 @@ if (build.isBuilding()) {
 
 
     println "lastbuildstarted : ${build} "  
-    def lastCompletedBuild = project.getLastCompletedBuild()
+    def lastCompletedBuild = build.getLastCompletedBuild()
     
     while ( lastCompletedBuild == null ) {
         sleep(100)
