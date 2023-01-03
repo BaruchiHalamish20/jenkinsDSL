@@ -47,15 +47,15 @@ def createJob(name, script) {
 @NonCPS
 def getLastCompletedBuild(projectName) {
   def project = Hudson.instance.getItem(projectName)
-  def jobA = Jenkins.instance.getItemByFullName(projectName)
+  def job = Jenkins.instance.getItemByFullName(projectName)
 
   // Wait for the build to complete
-  isBuild = jobA.isBuilding()
+  isBuild = job.isBuilding()
+  println "${job} ... ${isbuild}"
 
   while ( isBuild ) {
       println "waiting ... "
-      isBuild = jobA.isBuilding()
-      
+      isBuild = jobA.isBuilding()    
   }
 
     project = Hudson.instance.getItem(projectName)
