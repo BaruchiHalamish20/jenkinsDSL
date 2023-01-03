@@ -49,6 +49,12 @@ def getLastCompletedBuild(project) {
     println "getLastCompletedBuild ... "
     def lastCompletedBuild = project.getLastCompletedBuild()
     
+  def jobA = Jenkins.instance.getItemByFullName(project)
+ 
+
+  // Wait for the build to complete
+  jobA.waitForCompletion()
+ 
     while ( lastCompletedBuild == null ) {
         sleep(100)
         println "waiting ... "
@@ -63,46 +69,26 @@ def runDependendJobs(){
   def upstreamProject2 = Hudson.instance.getItem("nginxBuild")
   def downstreamProject = Hudson.instance.getItem("dslRunAndVerify")
 
-
-  def jobA = Jenkins.instance.getItemByFullName('flaskBuild')
-  def jobC = Jenkins.instance.getItemByFullName('nginxBuild')
-  def jobB = Jenkins.instance.getItemByFullName('dslRunAndVerify')
-
-  // Start a build of the first pipeline job
-  def buildA = jobA.build(cause: 'Started by script')
- def buildC = jobC.build(cause: 'Started by script')
-
-
-  // Wait for the build to complete
-  buildA.waitForCompletion()
-    buildC.waitForCompletion()
-
-  // Check the result of the build
-  if (buildA.getResult() == hudson.model.Result.SUCCESS) {
-    // Start a build of the second pipeline job
-    def buildB = jobB.build(cause: 'Started by script')
-  }
-
-//  if (upstreamProject1 != null && upstreamProject2 != null && downstreamProject != null) {
-//     // trigger builds for the upstream projects
-//     upstreamProject1.scheduleBuild(new Cause.UserIdCause())
-//     upstreamProject2.scheduleBuild(new Cause.UserIdCause())
+ if (upstreamProject1 != null && upstreamProject2 != null && downstreamProject != null) {
+    // trigger builds for the upstream projects
+    upstreamProject1.scheduleBuild(new Cause.UserIdCause())
+    upstreamProject2.scheduleBuild(new Cause.UserIdCause())
   
-//     // wait for the upstream builds to complete
+    // wait for the upstream builds to complete
 
-//     def build1 = getLastCompletedBuild(upstreamProject1)
-//     def build2 = getLastCompletedBuild(upstreamProject2)
+    def build1 = getLastCompletedBuild(upstreamProject1)
+    def build2 = getLastCompletedBuild(upstreamProject2)
 
-//     println "Builds done ... "
-//     // check the build results for the upstream projects
-//     def build1Result = build1.getResult()
-//     def build2Result = build2.getResult()
+    println "Builds done ... "
+    // check the build results for the upstream projects
+    def build1Result = build1.getResult()
+    def build2Result = build2.getResult()
 
-//     if (build1Result == Result.SUCCESS && build2Result == Result.SUCCESS) {
-//         // trigger the downstream build
-//         downstreamProject.scheduleBuild(new Cause.UpstreamCause(build1))
-//     }
-//   }
+    if (build1Result == Result.SUCCESS && build2Result == Result.SUCCESS) {
+        // trigger the downstream build
+        downstreamProject.scheduleBuild(new Cause.UpstreamCause(build1))
+    }
+  }
 }
 
 
