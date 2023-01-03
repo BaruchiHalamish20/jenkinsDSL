@@ -59,8 +59,6 @@ println "jobA ... ${isBuild} "
         println "waiting ... "
         isBuild = jobA.isBuilding()
         lastCompletedBuild = project.getLastCompletedBuild()
-        sleep(100)
-        
     }
     return lastCompletedBuild
 }
