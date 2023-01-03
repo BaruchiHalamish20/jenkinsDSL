@@ -65,9 +65,10 @@ println "1"
     println "lastbuildstarted : ${build} "  
     def lastCompletedBuild = build.getLastCompletedBuild()
     
-    while ( lastCompletedBuild == null ) {
+    while ( lastCompletedBuild == null && build.isBuilding() ) {
         sleep(100)
         println "waiting ... "
+        build = Hudson.instance.getItem(project)
         lastCompletedBuild = project.getLastCompletedBuild()
     }
     return lastCompletedBuild
