@@ -44,32 +44,33 @@ def createJob(name, script) {
 
 @NonCPS
 def getLastCompletedBuild(project) {
-    println "getLastCompletedBuild ... "
 
-    // Get a reference to the build
+// Get a reference to the build
 def build = Hudson.instance.getItem(project);
 def isInProgress = build.isBuilding()
 println "isInProgress: ${isInProgress}"
 
-// Check if the build is currently in progress
-if (build.isBuilding()) {
-  // Build is in progress
-  System.out.println("${project} is in progress...");
-println "1"
-} else {
-  // Build is not in progress
-  
-  System.out.println("${project} is not in progress.");
-  println "2"
-}
-
 // waiting for first build
-    while ( !build.isBuilding() ) {
+    while ( !isInProgress ) {
         sleep(100)
         println "waiting for build to start ... "
         build = Hudson.instance.getItem(project)
         isInProgress = build.isBuilding()
     }
+
+
+
+// // Check if the build is currently in progress
+// if (build.isBuilding()) {
+//   // Build is in progress
+//   System.out.println("${project} is in progress...");
+// println "1"
+// } else {
+//   // Build is not in progress
+  
+//   System.out.println("${project} is not in progress.");
+//   println "2"
+// }
     
  lastCompletedBuild = project.getLastCompletedBuild()
 
