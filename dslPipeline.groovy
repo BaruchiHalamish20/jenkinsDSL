@@ -59,7 +59,6 @@ println "isInProgress: ${isInProgress}"
     while ( isInProgress ) {
         checkProject = Hudson.instance.getItem("flaskBuild")
         checkProject.getLastCompletedBuild()
-        sleep(100)
         println "waiting for build to start ... "
         // build = Hudson.instance.getItem(project)
         isInProgress = build.isBuilding()
@@ -93,13 +92,24 @@ println "isInProgress: ${isInProgress}"
 
 def runDependendJobs(){
   
+  String jobName = "flaskBuild"
+Job job = Hudson.instance.getItem(jobName, Hudson.instance.getItemByFullName(jobName))
+
+// Schedule the build
+QueueTaskFuture future = job.scheduleBuild2(0)
+
+// Wait for the build to complete
+future.waitUntil()
+ println "After flusk ..."
+
   def upstreamProject1 = Hudson.instance.getItem("flaskBuild")
   def upstreamProject2 = Hudson.instance.getItem("nginxBuild")
   def downstreamProject = Hudson.instance.getItem("dslRunAndVerify")
 
  if (upstreamProject1 != null && upstreamProject2 != null && downstreamProject != null) {
     // trigger builds for the upstream projects
-    def upstreamJobRunOne = upstreamProject1.scheduleBuild(0)
+    build(upstreamJobRunOne)
+    // def upstreamJobRunOne = upstreamProject1.scheduleBuild(0)
     def upstreamJobRunSecond =  upstreamProject2.scheduleBuild(0)
 
     println "upstreamJobRunOne : ${upstreamJobRunOne} "  
