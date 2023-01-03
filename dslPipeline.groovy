@@ -53,7 +53,7 @@ def lastCompletedBuild = build.getLastCompletedBuild()
 println "isInProgress: ${isInProgress}"
 
 // waiting for first build
-    while ( lastCompletedBuild == null && isInProgress == false ) {
+    while ( lastCompletedBuild == null && !isInProgress ) {
         sleep(100)
         println "waiting for build to start ... "
         build = Hudson.instance.getItem(project)
